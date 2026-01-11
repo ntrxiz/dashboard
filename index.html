@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ntrxi | index</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;800&family=JetBrains+Mono:wght@700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #050505;
+            --text: #ffffff;
+            --secondary: #666666;
+            --border: #222222;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: var(--bg);
+            color: var(--text);
+            font-family: 'Inter', sans-serif;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* --- Header --- */
+        header {
+            padding: 3rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.2rem;
+            font-weight: 800;
+            letter-spacing: 0.8rem;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: all 0.5s ease;
+        }
+
+        .logo:hover {
+            letter-spacing: 1rem;
+            text-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
+        }
+
+        .status-dot {
+            height: 8px;
+            width: 8px;
+            background-color: #fff;
+            border-radius: 50%;
+            display: inline-block;
+            box-shadow: 0 0 10px #fff;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { opacity: 0.5; }
+            50% { opacity: 1; }
+            100% { opacity: 0.5; }
+        }
+
+        /* --- Hero Section --- */
+        .hero {
+            padding: 4rem 2rem;
+            max-width: 800px;
+        }
+
+        .bio {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.8rem;
+            color: var(--secondary);
+            margin-bottom: 2rem;
+            letter-spacing: 0.1rem;
+        }
+
+        h1 {
+            font-size: 4rem;
+            font-weight: 800;
+            line-height: 0.9;
+            margin: 0;
+            letter-spacing: -0.2rem;
+            text-transform: uppercase;
+        }
+
+        /* --- Project List --- */
+        .work-section {
+            padding-top: 2rem;
+            flex: 1;
+        }
+
+        .section-label {
+            padding: 0 2rem;
+            font-size: 0.65rem;
+            text-transform: uppercase;
+            letter-spacing: 0.2rem;
+            color: var(--secondary);
+            margin-bottom: 1rem;
+        }
+
+        .project-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            border-top: 1px solid var(--border);
+        }
+
+        .project-item {
+            border-bottom: 1px solid var(--border);
+            position: relative;
+            transition: background 0.2s;
+        }
+
+        .project-link {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 2.5rem 2rem;
+            text-decoration: none;
+            color: var(--text);
+            transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+        }
+
+        .project-name {
+            font-size: 2rem;
+            font-weight: 800;
+            letter-spacing: -0.1rem;
+            text-transform: uppercase;
+            position: relative;
+            z-index: 2;
+        }
+
+        .project-cat {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.7rem;
+            color: var(--secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.1rem;
+        }
+
+        /* Hover Effects */
+        .project-item:hover .project-link {
+            padding-left: 3rem;
+        }
+        .project-item:hover .project-name {
+            text-shadow: 0 0 20px rgba(255,255,255,0.4);
+        }
+        .project-item:hover .project-cat {
+            color: #fff;
+        }
+        .project-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 0%;
+            height: 100%;
+            background: #111;
+            z-index: 0;
+            transition: width 0.4s ease;
+        }
+        .project-item:hover::before {
+            width: 100%;
+        }
+
+        /* --- System / Apps Links (The requested addition) --- */
+        .system-nav {
+            padding: 4rem 2rem;
+            border-top: 1px solid var(--border);
+        }
+
+        .system-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .sys-link {
+            display: block;
+            border: 1px solid var(--border);
+            padding: 1rem;
+            text-align: center;
+            text-decoration: none;
+            color: var(--secondary);
+            font-size: 0.75rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.2rem;
+            transition: all 0.3s ease;
+        }
+
+        .sys-link:hover {
+            background: var(--text);
+            color: var(--bg);
+            border-color: var(--text);
+            box-shadow: 0 0 15px rgba(255,255,255,0.2);
+        }
+
+        /* --- Footer --- */
+        .contact {
+            padding: 2rem 2rem 4rem 2rem;
+            display: flex;
+            gap: 2rem;
+        }
+
+        .contact a {
+            color: var(--text);
+            text-decoration: none;
+            font-size: 0.8rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.2rem;
+            opacity: 0.5;
+            transition: opacity 0.3s;
+        }
+
+        .contact a:hover {
+            opacity: 1;
+        }
+
+        /* Mobile */
+        @media (max-width: 600px) {
+            h1 { font-size: 2.5rem; }
+            .project-name { font-size: 1.2rem; }
+            .system-grid { grid-template-columns: 1fr 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="logo">ntrxi</div>
+        <div class="status-dot" title="Online"></div>
+    </header>
+
+    <div class="hero">
+        <div class="bio">// FULL STACK ENGINEER</div>
+        <h1>
+            Building digital<br>
+            obsessions.
+        </h1>
+    </div>
+
+    <section class="work-section">
+        <div class="section-label">Selected Works</div>
+        <ul class="project-list">
+            <li class="project-item">
+                <a href="#" class="project-link">
+                    <span class="project-name">Liturgy API</span>
+                    <span class="project-cat">Backend</span>
+                </a>
+            </li>
+            <li class="project-item">
+                <a href="#" class="project-link">
+                    <span class="project-name">Neural Net</span>
+                    <span class="project-cat">Python / AI</span>
+                </a>
+            </li>
+            <li class="project-item">
+                <a href="#" class="project-link">
+                    <span class="project-name">Brutalist UI</span>
+                    <span class="project-cat">Design System</span>
+                </a>
+            </li>
+        </ul>
+    </section>
+
+    <nav class="system-nav">
+        <div class="section-label">System Modules</div>
+        <div class="system-grid">
+            <a href="calendar.html" class="sys-link">Calendar</a>
+            <a href="clock.html" class="sys-link">Clock</a>
+            <a href="pomodoro.html" class="sys-link">Pomodoro</a>
+            <a href="todo.html" class="sys-link">Todo</a>
+        </div>
+    </nav>
+
+    <div class="contact">
+        <a href="mailto:hello@ntrxi.com">Email</a>
+        <a href="#">Github</a>
+        <a href="#">Twitter</a>
+    </div>
+
+</body>
+</html>
