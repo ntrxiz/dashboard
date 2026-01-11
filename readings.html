@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VERBUM_DEI // SYSTEM</title>
+    <style>
+        :root {
+            --bg-color: #050505;
+            --text-color: #e0e0e0;
+            --accent-color: #fff; /* Holy White */
+            --dim-color: #666;
+            --font-stack: 'Courier New', Courier, monospace;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            font-family: var(--font-stack);
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* CRT Scanline Effect */
+        body::before {
+            content: " ";
+            display: block;
+            position: absolute;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            right: 0;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+            z-index: 2;
+            background-size: 100% 2px, 3px 100%;
+            pointer-events: none;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 700px;
+            z-index: 3;
+        }
+
+        /* Header ASCII */
+        pre.ascii-header {
+            font-size: 10px;
+            line-height: 10px;
+            color: var(--accent-color);
+            text-align: center;
+            white-space: pre;
+            overflow-x: hidden;
+            margin-bottom: 40px;
+            text-shadow: 0 0 5px var(--accent-color);
+            font-weight: bold;
+        }
+
+        /* Sections */
+        .section {
+            border: 1px solid var(--dim-color);
+            padding: 20px;
+            margin-bottom: 20px;
+            background: rgba(255, 255, 255, 0.02);
+        }
+
+        .section-header {
+            border-bottom: 1px solid var(--dim-color);
+            padding-bottom: 10px;
+            margin-bottom: 15px;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .data-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+
+        .label {
+            color: var(--dim-color);
+        }
+
+        .value {
+            color: var(--accent-color);
+            text-align: right;
+        }
+
+        /* Links */
+        a.read-btn {
+            display: block;
+            width: 100%;
+            text-align: center;
+            border: 1px solid var(--accent-color);
+            color: var(--accent-color);
+            text-decoration: none;
+            padding: 15px 0;
+            margin-top: 20px;
+            text-transform: uppercase;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+
+        a.read-btn:hover {
+            background-color: var(--accent-color);
+            color: var(--bg-color);
+            box-shadow: 0 0 15px var(--accent-color);
+            cursor: pointer;
+        }
+
+        /* Loading Animation */
+        .blinking-cursor {
+            display: inline-block;
+            width: 10px;
+            height: 15px;
+            background-color: var(--accent-color);
+            animation: blink 1s step-end infinite;
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+        }
+
+        .footer {
+            margin-top: 50px;
+            font-size: 0.8em;
+            color: var(--dim-color);
+            text-align: center;
+        }
+
+        /* Responsive ASCII fix */
+        @media (max-width: 600px) {
+            pre.ascii-header {
+                font-size: 6px;
+                line-height: 6px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <pre class="ascii-header">
+      ___           ___           ___           ___           ___     
+     /\  \         /\  \         /\  \         /\__\         /\  \    
+    _\:\  \       /::\  \       /::\  \       /:/  /        /::\  \   
+   /\ \:\  \     /:/\:\  \     /:/\ \  \     /:/  /        /:/\ \  \  
+  _\:\ \:\  \   /::\~\:\  \   _\:\~\ \  \   /:/  /  ___   _\:\~\ \  \ 
+ /\ \:\ \:\__\ /:/\:\ \:\__\ /\ \:\ \ \__\ /:/__/  /\__\ /\ \:\ \ \__\
+ \:\ \:\/:/  / \:\~\:\ \/__/ \:\ \:\ \/__/ \:\  \ /:/  / \:\ \:\ \/__/
+  \:\ \::/  /   \:\ \:\__\    \:\ \:\__\    \:\  /:/  /   \:\ \:\__\  
+   \:\/:/  /     \:\ \/__/     \:\/:/  /     \:\/:/  /     \:\/:/  /  
+    \::/  /       \:\__\        \::/  /       \::/  /       \::/  /   
+     \/__/         \/__/         \/__/         \/__/         \/__/    
+</pre>
+
+    <div class="section">
+        <div class="section-header">
+            <span>System Status</span>
+            <span>ONLINE</span>
+        </div>
+        <div class="data-row">
+            <span class="label">Date:</span>
+            <span class="value" id="current-date">LOADING...</span>
+        </div>
+        <div class="data-row">
+            <span class="label">Timezone:</span>
+            <span class="value" id="timezone">DETECTING...</span>
+        </div>
+        <div class="data-row">
+            <span class="label">Liturgical Season:</span>
+            <span class="value" id="liturgical-season">FETCHING...</span>
+        </div>
+        <div class="data-row">
+            <span class="label">Celebration:</span>
+            <span class="value" id="celebration-name">...</span>
+        </div>
+    </div>
+
+    <div class="section">
+        <div class="section-header">
+            <span>Daily Office</span>
+            <span>V.1.0</span>
+        </div>
+        <p style="margin-bottom: 20px; line-height: 1.6; color: var(--dim-color);">
+            > ESTABLISHING CONNECTION TO LECTIONARY DB...<br>
+            > SYNCING WITH UNIVERSAL CALENDAR...<br>
+            > PREPARING TEXTS...
+        </p>
+
+        <a id="readings-link" href="#" target="_blank" class="read-btn">
+            ACCESS TODAY'S READINGS <span class="blinking-cursor"></span>
+        </a>
+    </div>
+
+    <div class="footer">
+        AD MAJOREM DEI GLORIAM<br>
+        2024 © CATHOLIC_TERM
+    </div>
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const dateDisplay = document.getElementById('current-date');
+        const seasonDisplay = document.getElementById('liturgical-season');
+        const celebDisplay = document.getElementById('celebration-name');
+        const tzDisplay = document.getElementById('timezone');
+        const linkButton = document.getElementById('readings-link');
+
+        const today = new Date();
+        
+        // 1. Display Date
+        const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+        dateDisplay.textContent = today.toLocaleDateString('en-US', options).toUpperCase();
+        tzDisplay.textContent = Intl.DateTimeFormat().resolvedOptions().timeZone.toUpperCase();
+
+        // 2. Fetch Liturgical Data (Using a public API wrapper)
+        // We use calapi.inadiutorium.cz for liturgical info
+        fetch('http://calapi.inadiutorium.cz/api/v0/en/calendars/general-en/today')
+            .then(response => response.json())
+            .then(data => {
+                seasonDisplay.textContent = data.season.toUpperCase();
+                // If there are specific celebrations (Saints, Feasts), show them
+                if (data.celebrations && data.celebrations.length > 0) {
+                    celebDisplay.textContent = data.celebrations[0].title.toUpperCase();
+                    // Change accent color based on liturgical color if desired
+                    // Simple mapping:
+                    const colorMap = {
+                        'white': '#ffffff',
+                        'red': '#ff3333',
+                        'green': '#00ff00',
+                        'violet': '#b666d2'
+                    };
+                    if (colorMap[data.celebrations[0].colour]) {
+                        document.documentElement.style.setProperty('--accent-color', colorMap[data.celebrations[0].colour]);
+                    }
+                } else {
+                    celebDisplay.textContent = "FERIAL DAY";
+                }
+            })
+            .catch(err => {
+                console.error("API Error", err);
+                seasonDisplay.textContent = "OFFLINE MODE";
+                celebDisplay.textContent = "ORDINARY TIME";
+            });
+
+        // 3. Generate Link to USCCB Readings
+        // USCCB URL format: https://bible.usccb.org/bible/readings/MMDDYY.cfm
+        const dayStr = String(today.getDate()).padStart(2, '0');
+        const monthStr = String(today.getMonth() + 1).padStart(2, '0');
+        const yearStr = String(today.getFullYear()).slice(-2);
+        
+        const usccbUrl = `https://bible.usccb.org/bible/readings/${monthStr}${dayStr}${yearStr}.cfm`;
+        
+        linkButton.href = usccbUrl;
+    });
+</script>
+
+</body>
+</html>
