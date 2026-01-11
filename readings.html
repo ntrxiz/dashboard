@@ -3,14 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>jesus | readings</title>
+    <title>JESUS | Lectionary</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;800&family=JetBrains+Mono:wght@700&display=swap" rel="stylesheet">
     <style>
         :root {
             --bg: #050505;
             --text: #ffffff;
             --secondary: #111111;
-            --accent: #333333;
             --border: #222222;
         }
 
@@ -26,11 +25,10 @@
             overflow-x: hidden;
         }
 
-        /* --- Header / Banner --- */
+        /* --- Header --- */
         header {
             padding: 3rem 0;
             text-align: center;
-            z-index: 10;
         }
 
         .logo {
@@ -38,20 +36,18 @@
             font-weight: 800;
             letter-spacing: 0.8rem;
             text-transform: uppercase;
-            cursor: default;
+            cursor: pointer;
             display: inline-block;
             transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
-            position: relative;
         }
 
         .logo:hover {
             transform: scale(1.1);
             letter-spacing: 1.0rem;
-            text-shadow: 0 0 15px rgba(255, 255, 255, 0.6),
-                         0 0 30px rgba(255, 255, 255, 0.2);
+            text-shadow: 0 0 15px rgba(255, 255, 255, 0.6);
         }
 
-        /* --- Main Content --- */
+        /* --- Main --- */
         main {
             flex: 1;
             display: flex;
@@ -61,78 +57,97 @@
             padding: 2rem;
         }
 
-        .content-container {
-            text-align: center;
+        .content-wrapper {
             width: 100%;
-            max-width: 700px;
-            opacity: 0;
-            animation: fadeIn 1.5s ease forwards;
+            max-width: 600px;
+            text-align: center;
         }
 
-        @keyframes fadeIn {
-            to { opacity: 1; }
-        }
-
-        /* The Aesthetic Typography */
-        .date-display {
-            font-size: 0.75rem;
-            text-transform: uppercase;
-            letter-spacing: 0.4rem;
-            opacity: 0.5;
-            margin-bottom: 3rem;
-        }
-
-        .reading-label {
+        /* Date Styling */
+        .liturgical-date {
             font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.3rem;
+            opacity: 0.5;
+            margin-bottom: 2rem;
+        }
+
+        /* The Feast / Day Title */
+        #day-title {
+            font-size: 2rem;
+            font-weight: 800;
+            line-height: 1.1;
+            letter-spacing: -0.1rem;
+            margin-bottom: 2rem;
+            text-transform: uppercase;
+        }
+
+        /* The Readings List */
+        .readings-container {
+            border-top: 1px solid var(--border);
+            border-bottom: 1px solid var(--border);
+            padding: 2rem 0;
+            margin: 1rem 0;
+            text-align: left; /* Brutalist list look */
+        }
+
+        .reading-item {
+            margin-bottom: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.3rem;
+        }
+
+        .reading-type {
+            font-size: 0.65rem;
             text-transform: uppercase;
             letter-spacing: 0.2rem;
             color: #666;
-            margin-bottom: 1rem;
-            border: 1px solid var(--border);
-            display: inline-block;
-            padding: 0.4rem 1rem;
-            border-radius: 50px;
-        }
-
-        .scripture-text {
-            font-family: 'Inter', sans-serif;
-            font-size: 2.5rem; /* Large and impactful */
             font-weight: 800;
-            line-height: 1.1;
-            margin: 1rem 0;
-            letter-spacing: -0.1rem; 
         }
 
-        .reference {
-            font-size: 0.9rem;
-            font-weight: 400;
-            margin-top: 1.5rem;
-            opacity: 0.7;
-            letter-spacing: 0.1rem;
+        .reading-ref {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 1.1rem;
+            color: var(--text);
         }
 
-        /* Location Badge */
-        .location-badge {
-            margin-top: 4rem;
-            font-size: 0.6rem;
+        /* Button to Full Text */
+        .action-btn {
+            margin-top: 3rem;
+            background: transparent;
+            border: 1px solid var(--border);
+            color: var(--text);
+            padding: 1rem 2.5rem;
+            font-size: 0.7rem;
+            font-weight: 800;
             text-transform: uppercase;
-            letter-spacing: 0.15rem;
-            color: #444;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 0.5rem;
+            letter-spacing: 0.2rem;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            transition: all 0.3s ease;
         }
 
-        .location-dot {
-            width: 6px;
-            height: 6px;
-            background-color: #fff;
-            border-radius: 50%;
-            box-shadow: 0 0 10px #fff;
+        .action-btn:hover {
+            background: var(--text);
+            color: var(--bg);
+            box-shadow: 0 0 20px rgba(255,255,255,0.1);
         }
 
-        /* --- Footer --- */
+        .loading {
+            font-size: 0.8rem;
+            letter-spacing: 0.2rem;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { opacity: 0.3; }
+            50% { opacity: 1; }
+            100% { opacity: 0.3; }
+        }
+
+        /* Footer */
         footer {
             padding: 3rem;
             text-align: center;
@@ -140,12 +155,6 @@
             opacity: 0.3;
             letter-spacing: 0.3rem;
             text-transform: uppercase;
-        }
-
-        /* Mobile Adjustments */
-        @media (max-width: 600px) {
-            .scripture-text { font-size: 1.8rem; }
-            .logo { font-size: 1rem; letter-spacing: 0.5rem; }
         }
     </style>
 </head>
@@ -156,73 +165,89 @@
     </header>
 
     <main>
-        <div class="content-container">
-            <div id="date-display" class="date-display">LOADING...</div>
-
-            <div class="reading-label">Gospel / Daily Word</div>
+        <div class="content-wrapper">
+            <div id="date-display" class="liturgical-date">LOCATING...</div>
             
-            <div id="scripture-text" class="scripture-text">
-                "Be still, and know that I am God."
-            </div>
-            
-            <div id="reference" class="reference">Psalm 46:10</div>
-
-            <div class="location-badge">
-                <div class="location-dot"></div>
-                <span id="location-text">Locating...</span>
+            <div id="main-content">
+                <div class="loading">FETCHING LECTIONARY...</div>
             </div>
         </div>
     </main>
 
     <footer>
-        Verbum Domini • Aeternum
+        Ordo Lectionum Missae
     </footer>
 
     <script>
-        // --- 1. Date & Location Logic ---
+        // 1. Set Date & Location Display
         const dateDisplay = document.getElementById('date-display');
-        const locationText = document.getElementById('location-text');
+        const mainContent = document.getElementById('main-content');
         
         const now = new Date();
-        const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+        const options = { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' };
         
-        // Format: SUNDAY, JANUARY 11, 2026
-        dateDisplay.textContent = now.toLocaleDateString('en-US', options);
+        // Simple Timezone check to display user context
+        const userTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+        const formattedDate = now.toLocaleDateString('en-US', options);
+        dateDisplay.innerText = `${formattedDate} • ${userTimeZone.split('/')[1] || 'LOCAL'}`.toUpperCase();
 
-        // Simple Timezone detection for "Location"
-        const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-        locationText.textContent = timeZone.replace('_', ' ').toUpperCase();
+        // 2. Fetch USCCB Readings via RSS Proxy
+        // We use rss2json to bypass CORS issues with the official USCCB feed
+        const USCCB_RSS = 'https://bible.usccb.org/bible/readings/rss/index.cfm';
+        const PROXY_URL = 'https://api.rss2json.com/v1/api.json?rss_url=' + encodeURIComponent(USCCB_RSS);
 
-
-        // --- 2. Fetch Daily Reading (Simulation) ---
-        // Note: Full Catholic Lectionary APIs (USCCB) often block direct browser access (CORS).
-        // This script fetches a daily verse from a public API to maintain functionality
-        // while preserving the requested Catholic aesthetic.
-        
-        const scriptureText = document.getElementById('scripture-text');
-        const referenceDisplay = document.getElementById('reference');
-
-        async function fetchDailyReading() {
+        async function getReadings() {
             try {
-                // Using a public API for demonstration. 
-                // Ideally, replace with a specific Catholic Lectionary endpoint if available.
-                const response = await fetch('https://bible-api.com/?random=verse');
+                const response = await fetch(PROXY_URL);
                 const data = await response.json();
+                
+                // The first item is usually "Today's" reading
+                // Sometimes the feed updates early/late, so we check the date if possible, 
+                // but usually item[0] is the correct active lectionary entry.
+                const todayReading = data.items[0]; 
 
-                if(data && data.text) {
-                    scriptureText.textContent = `"${data.text.trim()}"`;
-                    referenceDisplay.textContent = data.reference;
-                }
+                renderReadings(todayReading);
             } catch (error) {
-                console.error("Error fetching reading:", error);
-                scriptureText.textContent = "In the beginning was the Word, and the Word was with God.";
-                referenceDisplay.textContent = "John 1:1";
+                console.error(error);
+                mainContent.innerHTML = `
+                    <div style="opacity:0.5; letter-spacing:0.1rem;">
+                        UNABLE TO CONNECT TO LECTIONARY.<br>CHECK NETWORK.
+                    </div>
+                `;
             }
         }
 
-        // Trigger fetch
-        fetchDailyReading();
+        function renderReadings(reading) {
+            // The USCCB RSS Title is usually formatted like: "Monday of the Fourth Week of Advent"
+            const title = reading.title;
+            const link = reading.link;
+            
+            // The content snippet often contains the HTML of the readings. 
+            // We can try to parse it, or just direct the user to the full text for cleanliness.
+            // For this aesthetic, we want to extract the citations if possible, 
+            // but the RSS content is often unstructured HTML.
+            
+            // We will create a clean "Launch" experience.
+            
+            mainContent.innerHTML = `
+                <div id="day-title">${title}</div>
+                
+                <div class="readings-container">
+                    <div class="reading-item">
+                        <span class="reading-type">Source</span>
+                        <span class="reading-ref">Daily Mass Lectionary</span>
+                    </div>
+                    <div class="reading-item">
+                        <span class="reading-type">Status</span>
+                        <span class="reading-ref">Verbum Domini</span>
+                    </div>
+                </div>
 
+                <a href="${link}" target="_blank" class="action-btn">Read Full Text</a>
+            `;
+        }
+
+        getReadings();
     </script>
 </body>
 </html>
