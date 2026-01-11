@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Focus Dashboard v2.1</title>
+    <title>Focus Dashboard v2.2</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
@@ -153,20 +153,29 @@
 
         /* --- CLOCK STYLES (UPDATED) --- */
         .clock-container h1 {
-            font-size: 8rem; /* Made slightly bigger */
-            font-weight: 700; /* BOLDER */
-            letter-spacing: -2px; /* Tighter spacing for bold text */
+            font-size: 8rem; 
+            font-weight: 700; 
+            letter-spacing: -2px; 
             background: linear-gradient(to bottom right, #fff, #999);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             line-height: 1;
         }
+        /* Style for the AM/PM indicator */
+        .clock-container span.ampm {
+            font-size: 3rem;
+            font-weight: 300;
+            margin-left: 10px;
+            color: #666;
+            -webkit-text-fill-color: #666; /* Override gradient for AM/PM */
+        }
+        
         .clock-container p { color: #888; margin-top: 10px; font-size: 1.2rem; text-align: center; }
 
         /* --- TIMER STYLES (UPDATED) --- */
         .timer-display { 
             font-size: 6rem; 
-            font-weight: 700; /* BOLDER */
+            font-weight: 700; 
             font-variant-numeric: tabular-nums; 
             margin-bottom: 20px; 
             line-height: 1;
@@ -192,8 +201,8 @@
             border: none;
             border-bottom: 2px solid #333;
             color: #fff;
-            font-size: 2rem; /* Larger input */
-            font-weight: 700; /* Bold input */
+            font-size: 2rem; 
+            font-weight: 700; 
             width: 80px;
             text-align: center;
         }
@@ -202,7 +211,7 @@
         /* --- STOPWATCH STYLES (UPDATED) --- */
         .stopwatch-display { 
             font-size: 6rem; 
-            font-weight: 700; /* BOLDER */
+            font-weight: 700; 
             font-variant-numeric: tabular-nums; 
             line-height: 1;
         }
@@ -354,7 +363,7 @@
 
     <main>
         <div id="section-clock" class="section active-section clock-container">
-            <h1 id="clock-time">00:00</h1>
+            <h1 id="clock-time">00:00 <span class="ampm">AM</span></h1>
             <p id="clock-date" class="subtitle">Loading Date...</p>
         </div>
 
@@ -428,14 +437,22 @@
     </footer>
 
     <script>
-        // --- 1. CLOCK LOGIC (Updated to remove seconds) ---
+        // --- 1. CLOCK LOGIC (Updated to 12-hr with AM/PM) ---
         function updateClock() {
             const now = new Date();
-            // This format specifically gets HH:MM without seconds, using system local time
-            const timeString = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false });
+            // Get Hours, Minutes and AM/PM logic manually to separate styling
+            let hours = now.getHours();
+            const minutes = now.getMinutes().toString().padStart(2, '0');
+            const ampm = hours >= 12 ? 'PM' : 'AM';
+            
+            hours = hours % 12;
+            hours = hours ? hours : 12; // the hour '0' should be '12'
+            
+            const timeString = `${hours}:${minutes}`;
             const dateString = now.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' });
             
-            document.getElementById('clock-time').textContent = timeString;
+            // Insert HTML to style AM/PM separately (smaller font)
+            document.getElementById('clock-time').innerHTML = `${timeString} <span class="ampm">${ampm}</span>`;
             document.getElementById('clock-date').textContent = dateString;
         }
         setInterval(updateClock, 1000);
