@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Focus Dashboard v2.0</title>
+    <title>Focus Dashboard v2.1</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
@@ -151,20 +151,26 @@
             pointer-events: all;
         }
 
-        /* --- CLOCK STYLES --- */
+        /* --- CLOCK STYLES (UPDATED) --- */
         .clock-container h1 {
-            font-size: 6rem;
-            font-weight: 200;
-            letter-spacing: 2px;
-            background: linear-gradient(to bottom right, #fff, #888);
+            font-size: 8rem; /* Made slightly bigger */
+            font-weight: 700; /* BOLDER */
+            letter-spacing: -2px; /* Tighter spacing for bold text */
+            background: linear-gradient(to bottom right, #fff, #999);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             line-height: 1;
         }
         .clock-container p { color: #888; margin-top: 10px; font-size: 1.2rem; text-align: center; }
 
-        /* --- TIMER STYLES --- */
-        .timer-display { font-size: 5rem; font-weight: 300; font-variant-numeric: tabular-nums; margin-bottom: 20px; }
+        /* --- TIMER STYLES (UPDATED) --- */
+        .timer-display { 
+            font-size: 6rem; 
+            font-weight: 700; /* BOLDER */
+            font-variant-numeric: tabular-nums; 
+            margin-bottom: 20px; 
+            line-height: 1;
+        }
         .control-btn {
             background: var(--glass-bg);
             border: 1px solid var(--glass-border);
@@ -186,14 +192,20 @@
             border: none;
             border-bottom: 2px solid #333;
             color: #fff;
-            font-size: 1.5rem;
-            width: 60px;
+            font-size: 2rem; /* Larger input */
+            font-weight: 700; /* Bold input */
+            width: 80px;
             text-align: center;
         }
         .timer-input:focus { outline: none; border-color: var(--accent-color); }
 
-        /* --- STOPWATCH STYLES --- */
-        .stopwatch-display { font-size: 5rem; font-weight: 300; font-variant-numeric: tabular-nums; }
+        /* --- STOPWATCH STYLES (UPDATED) --- */
+        .stopwatch-display { 
+            font-size: 6rem; 
+            font-weight: 700; /* BOLDER */
+            font-variant-numeric: tabular-nums; 
+            line-height: 1;
+        }
         .laps { 
             max-height: 150px; 
             overflow-y: auto; 
@@ -342,14 +354,14 @@
 
     <main>
         <div id="section-clock" class="section active-section clock-container">
-            <h1 id="clock-time">00:00:00</h1>
+            <h1 id="clock-time">00:00</h1>
             <p id="clock-date" class="subtitle">Loading Date...</p>
         </div>
 
         <div id="section-timer" class="section">
             <div class="timer-inputs" id="timer-setup">
                 <input type="number" id="t-min" class="timer-input" placeholder="25" value="25" min="0">
-                <span style="font-size:1.5rem; padding-top:5px;">:</span>
+                <span style="font-size:2rem; font-weight:700; padding-top:5px;">:</span>
                 <input type="number" id="t-sec" class="timer-input" placeholder="00" value="00" min="0" max="59">
             </div>
             <div id="timer-display" class="timer-display" style="display:none;">25:00</div>
@@ -416,10 +428,11 @@
     </footer>
 
     <script>
-        // --- 1. CLOCK LOGIC ---
+        // --- 1. CLOCK LOGIC (Updated to remove seconds) ---
         function updateClock() {
             const now = new Date();
-            const timeString = now.toLocaleTimeString('en-US', { hour12: false });
+            // This format specifically gets HH:MM without seconds, using system local time
+            const timeString = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false });
             const dateString = now.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' });
             
             document.getElementById('clock-time').textContent = timeString;
@@ -497,7 +510,7 @@
                         clearInterval(timerInterval);
                         isTimerRunning = false;
                         btn.textContent = 'Start';
-                        alert("Time's Up!"); // Simple alert, can be replaced with sound
+                        alert("Time's Up!"); 
                         resetTimer();
                     } else {
                         totalSeconds--;
