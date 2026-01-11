@@ -3,306 +3,376 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ntrxi | index</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;800&family=JetBrains+Mono:wght@700&display=swap" rel="stylesheet">
+    <title>Focus Dashboard</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
-            --bg: #050505;
-            --text: #ffffff;
-            --secondary: #666666;
-            --border: #222222;
+            --bg-color: #0f0f13;
+            --text-color: #e0e0e0;
+            --accent-color: #7c4dff; /* Deep Purple */
+            --glass-bg: rgba(255, 255, 255, 0.05);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --sidebar-width: 300px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
         }
 
         body {
-            margin: 0;
-            padding: 0;
-            background-color: var(--bg);
-            color: var(--text);
-            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            height: 100vh;
+            overflow: hidden; /* Prevent scrolling usually */
             display: flex;
             flex-direction: column;
-            min-height: 100vh;
-            overflow-x: hidden;
+            position: relative;
         }
 
-        /* --- Header --- */
-        header {
-            padding: 3rem 2rem;
+        /* --- 1. Main Content Area (Placeholder for Clock/Pomodoro) --- */
+        main {
+            flex: 1;
             display: flex;
-            justify-content: space-between;
+            justify-content: center;
             align-items: center;
-        }
-
-        .logo {
-            font-size: 1.2rem;
-            font-weight: 800;
-            letter-spacing: 0.8rem;
-            text-transform: uppercase;
-            cursor: pointer;
-            transition: all 0.5s ease;
-        }
-
-        .logo:hover {
-            letter-spacing: 1rem;
-            text-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
-        }
-
-        .status-dot {
-            height: 8px;
-            width: 8px;
-            background-color: #fff;
-            border-radius: 50%;
-            display: inline-block;
-            box-shadow: 0 0 10px #fff;
-            animation: pulse 2s infinite;
-        }
-
-        @keyframes pulse {
-            0% { opacity: 0.5; }
-            50% { opacity: 1; }
-            100% { opacity: 0.5; }
-        }
-
-        /* --- Hero Section --- */
-        .hero {
-            padding: 4rem 2rem;
-            max-width: 800px;
-        }
-
-        .bio {
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 0.8rem;
-            color: var(--secondary);
-            margin-bottom: 2rem;
-            letter-spacing: 0.1rem;
+            flex-direction: column;
+            z-index: 1;
+            transition: 0.3s ease;
         }
 
         h1 {
             font-size: 4rem;
-            font-weight: 800;
-            line-height: 0.9;
-            margin: 0;
-            letter-spacing: -0.2rem;
+            font-weight: 200;
+            letter-spacing: 2px;
+            background: linear-gradient(to right, #fff, #aaa);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        p.subtitle {
+            color: #888;
+            margin-top: 10px;
+        }
+
+        /* --- 2. Vertical Side Triggers --- */
+        .side-triggers {
+            position: fixed;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            z-index: 100;
+            padding-left: 10px;
+        }
+
+        .trigger-btn {
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--glass-border);
+            color: var(--text-color);
+            padding: 20px 10px;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            
+            /* Vertical Text Magic */
+            writing-mode: vertical-rl;
+            text-orientation: mixed;
+            transform: rotate(180deg); /* Flips text so it reads bottom-to-top */
+            
+            font-size: 0.9rem;
+            letter-spacing: 2px;
             text-transform: uppercase;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
         }
 
-        /* --- Project List --- */
-        .work-section {
-            padding-top: 2rem;
-            flex: 1;
+        .trigger-btn:hover, .trigger-btn.active {
+            background: var(--accent-color);
+            color: white;
+            box-shadow: 0 0 15px var(--accent-color);
+            transform: rotate(180deg) translateX(-5px); 
         }
 
-        .section-label {
-            padding: 0 2rem;
-            font-size: 0.65rem;
-            text-transform: uppercase;
-            letter-spacing: 0.2rem;
-            color: var(--secondary);
-            margin-bottom: 1rem;
+        /* --- 3. The Sidebar (Off-Canvas) --- */
+        .sidebar {
+            position: fixed;
+            left: -320px; /* Hidden initially */
+            top: 0;
+            height: 100%;
+            width: var(--sidebar-width);
+            background: rgba(15, 15, 19, 0.95);
+            backdrop-filter: blur(20px);
+            border-right: 1px solid var(--glass-border);
+            z-index: 90;
+            transition: left 0.4s cubic-bezier(0.19, 1, 0.22, 1);
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
         }
 
-        .project-list {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-            border-top: 1px solid var(--border);
+        .sidebar.open {
+            left: 0; /* Slide in */
         }
 
-        .project-item {
-            border-bottom: 1px solid var(--border);
-            position: relative;
-            transition: background 0.2s;
-        }
-
-        .project-link {
+        .sidebar-header {
+            font-size: 1.5rem;
+            margin-bottom: 40px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid var(--glass-border);
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 2.5rem 2rem;
-            text-decoration: none;
-            color: var(--text);
-            transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
         }
 
-        .project-name {
-            font-size: 2rem;
-            font-weight: 800;
-            letter-spacing: -0.1rem;
-            text-transform: uppercase;
-            position: relative;
-            z-index: 2;
+        .close-btn {
+            background: none;
+            border: none;
+            color: #888;
+            font-size: 1.2rem;
+            cursor: pointer;
         }
+        .close-btn:hover { color: #fff; }
 
-        .project-cat {
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 0.7rem;
-            color: var(--secondary);
-            text-transform: uppercase;
-            letter-spacing: 0.1rem;
-        }
+        /* Sidebar Content Styling */
+        .sidebar-content { display: none; opacity: 0; transition: opacity 0.3s ease; }
+        .sidebar-content.active { display: block; opacity: 1; }
 
-        /* Hover Effects */
-        .project-item:hover .project-link { padding-left: 3rem; }
-        .project-item:hover .project-name { text-shadow: 0 0 20px rgba(255,255,255,0.4); }
-        .project-item:hover .project-cat { color: #fff; }
-        .project-item::before {
-            content: '';
-            position: absolute;
-            top: 0; left: 0; width: 0%; height: 100%;
-            background: #111; z-index: 0; transition: width 0.4s ease;
-        }
-        .project-item:hover::before { width: 100%; }
-
-        /* --- System Modules & Social Grids --- */
-        .bottom-nav {
-            padding: 4rem 2rem;
-            border-top: 1px solid var(--border);
-        }
-
-        .grid-container {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-            gap: 1rem;
-            margin-top: 1rem;
-            margin-bottom: 3rem;
-            max-width: 800px;
-        }
-
-        /* System Link Style */
-        .sys-link {
-            display: block;
-            border: 1px solid var(--border);
-            padding: 1rem;
-            text-align: center;
-            text-decoration: none;
-            color: var(--secondary);
-            font-size: 0.7rem;
-            font-weight: 800;
-            text-transform: uppercase;
-            letter-spacing: 0.2rem;
-            transition: all 0.3s ease;
-        }
-
-        .sys-link:hover {
-            background: var(--text);
-            color: var(--bg);
-            border-color: var(--text);
-            box-shadow: 0 0 15px rgba(255,255,255,0.2);
-        }
-
-        /* Social Button Style */
-        .social-btn {
+        .social-link {
             display: flex;
             align-items: center;
-            justify-content: center;
-            gap: 1rem;
-            border: 1px solid var(--border);
-            padding: 1rem 1.5rem;
+            gap: 15px;
+            padding: 15px;
+            margin-bottom: 10px;
+            background: var(--glass-bg);
+            border-radius: 8px;
             text-decoration: none;
-            color: var(--text);
-            font-size: 0.7rem;
-            font-weight: 800;
-            text-transform: uppercase;
-            letter-spacing: 0.1rem;
+            color: var(--text-color);
+            transition: 0.2s;
+        }
+        .social-link:hover {
+            background: rgba(255,255,255,0.1);
+            transform: translateX(5px);
+        }
+
+        .system-stat {
+            margin-bottom: 20px;
+        }
+        .stat-bar {
+            height: 6px;
+            background: #333;
+            border-radius: 3px;
+            margin-top: 8px;
+            overflow: hidden;
+        }
+        .stat-fill {
+            height: 100%;
+            background: var(--accent-color);
+            width: 0%; /* JS will animate this */
+            transition: width 1s ease;
+        }
+
+        /* --- 4. The Footer (As Requested) --- */
+        .app-footer {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+            
+            padding: 12px 30px;
+            background: rgba(20, 20, 25, 0.6);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 50px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
+            z-index: 50;
+        }
+
+        .footer-item {
+            color: #888;
+            font-size: 0.9rem;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
             transition: all 0.3s ease;
+            position: relative;
         }
 
-        .social-btn svg {
-            width: 18px;
-            height: 18px;
-            fill: currentColor;
-            transition: all 0.3s ease;
+        .footer-item i { font-size: 1rem; }
+
+        .footer-item:hover, .footer-item.active {
+            color: #fff;
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
         }
 
-        .social-btn:hover {
-            background: var(--text);
-            color: var(--bg);
-            border-color: var(--text);
-            box-shadow: 0 0 20px rgba(255,255,255,0.3);
-        }
-        
-        .social-btn:hover svg {
-             filter: drop-shadow(0 0 5px rgba(0,0,0,0.5));
+        .footer-divider {
+            width: 1px;
+            height: 20px;
+            background: rgba(255, 255, 255, 0.1);
         }
 
-
-        /* Mobile */
-        @media (max-width: 600px) {
-            h1 { font-size: 2.5rem; }
-            .project-name { font-size: 1.2rem; }
-            .grid-container { grid-template-columns: 1fr 1fr; }
+        /* Overlay to click-off sidebar */
+        .overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 80;
+            opacity: 0;
+            pointer-events: none;
+            transition: 0.3s;
         }
+        .overlay.active { opacity: 1; pointer-events: auto; }
+
     </style>
 </head>
 <body>
 
-    <header>
-        <div class="logo">ntrxi</div>
-        <div class="status-dot" title="Online"></div>
-    </header>
+    <div class="overlay" id="overlay" onclick="closeSidebar()"></div>
 
-    <div class="hero">
-        <div class="bio">// FULL STACK ENGINEER</div>
-        <h1>
-            Building digital<br>
-            obsessions.
-        </h1>
+    <div class="side-triggers">
+        <button class="trigger-btn" onclick="openSidebar('socials', this)">Socials</button>
+        <button class="trigger-btn" onclick="openSidebar('system', this)">System Modulo</button>
     </div>
 
-    <section class="work-section">
-        <div class="section-label">Selected Works</div>
-        <ul class="project-list">
-            <li class="project-item">
-                <a href="#" class="project-link">
-                    <span class="project-name">Project One</span>
-                    <span class="project-cat">Category // 202X</span>
-                </a>
-            </li>
-            <li class="project-item">
-                <a href="#" class="project-link">
-                    <span class="project-name">Project Two</span>
-                    <span class="project-cat">Category // 202X</span>
-                </a>
-            </li>
-            <li class="project-item">
-                <a href="#" class="project-link">
-                    <span class="project-name">Project Three</span>
-                    <span class="project-cat">Category // 202X</span>
-                </a>
-            </li>
-        </ul>
-    </section>
-
-    <nav class="bottom-nav">
-        
-        <div class="section-label">System Modules</div>
-        <div class="grid-container">
-            <a href="calendar.html" class="sys-link">Calendar</a>
-            <a href="clock.html" class="sys-link">Clock</a>
-            <a href="pomodoro.html" class="sys-link">Pomodoro</a>
-            <a href="todo.html" class="sys-link">Todo</a>
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <span id="sidebar-title">Menu</span>
+            <button class="close-btn" onclick="closeSidebar()"><i class="fa-solid fa-times"></i></button>
         </div>
 
-        <div class="section-label">Connect</div>
-        <div class="grid-container">
+        <div id="content-socials" class="sidebar-content">
+            <a href="#" class="social-link">
+                <i class="fa-brands fa-github fa-lg"></i>
+                <span>GitHub</span>
+            </a>
+            <a href="#" class="social-link">
+                <i class="fa-brands fa-twitter fa-lg"></i>
+                <span>Twitter</span>
+            </a>
+            <a href="#" class="social-link">
+                <i class="fa-brands fa-linkedin fa-lg"></i>
+                <span>LinkedIn</span>
+            </a>
+            <a href="#" class="social-link">
+                <i class="fa-brands fa-discord fa-lg"></i>
+                <span>Discord</span>
+            </a>
+        </div>
+
+        <div id="content-system" class="sidebar-content">
+            <div class="system-stat">
+                <div style="display:flex; justify-content:space-between; font-size:0.85rem; color:#aaa;">
+                    <span>CPU Load</span>
+                    <span>12%</span>
+                </div>
+                <div class="stat-bar"><div class="stat-fill" style="width: 12%;"></div></div>
+            </div>
             
-            <a href="https://www.youtube.com/@ntrxi/" target="_blank" class="social-btn">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
-                YouTube
-            </a>
+            <div class="system-stat">
+                <div style="display:flex; justify-content:space-between; font-size:0.85rem; color:#aaa;">
+                    <span>Memory</span>
+                    <span>48%</span>
+                </div>
+                <div class="stat-bar"><div class="stat-fill" style="width: 48%;"></div></div>
+            </div>
 
-            <a href="https://www.twitch.tv/ntrxi/" target="_blank" class="social-btn">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M11.571 4.714h1.715v5.143H11.57zm4.715 0H18v5.143h-1.714zM6 0L1.714 4.286v15.428h5.143V24l4.286-4.286h3.428L22.286 12V0zm14.571 11.143l-3.428 3.428h-3.429l-3 3v-3H6.857V1.714h13.714Z"/></svg>
-                Twitch
-            </a>
+            <div class="system-stat">
+                <div style="display:flex; justify-content:space-between; font-size:0.85rem; color:#aaa;">
+                    <span>Focus Score</span>
+                    <span>850</span>
+                </div>
+                <div class="stat-bar"><div class="stat-fill" style="width: 85%;"></div></div>
+            </div>
 
-            <a href="http://discord.gg/b67X2Gdkw7/" target="_blank" class="social-btn">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.317 4.3698a19.7913 19.7913 0 00-4.8851-1.5152.0741.0741 0 00-.0785.0371c-.211.3753-.4447.8648-.6083 1.2495-1.8447-.2762-3.6853-.2762-5.4868 0-.1636-.3933-.4058-.8742-.6177-1.2495a.077.077 0 00-.0785-.037 19.7363 19.7363 0 00-4.8852 1.515.0699.0699 0 00-.0321.0277C.5334 9.0458-.319 13.5799.0992 18.0578a.0824.0824 0 00.0312.0561c2.053 1.5076 4.0413 2.4228 5.9929 3.0294a.0777.0777 0 00.0842-.0276c.4616-.6304.8731-1.2952 1.226-1.9942a.076.076 0 00-.0416-1.0579 13.7133 13.7133 0 01-1.9942-.9563.077.077 0 01-.0076-.1068c.1482-.1124.2966-.2333.4367-.356a.0769.0769 0 01.0775-.013c3.9288 1.7933 8.18 1.7933 12.0614 0a.077.077 0 01.0785.013c.1401.1226.2885.2435.4367.356a.077.077 0 01-.0076.1068 13.6122 13.6122 0 01-1.9942.9563.076.076 0 00-.0416 1.0579c.3529.699.7644 1.3638 1.226 1.9942a.0777.0777 0 00.0842.0276c1.9516-.6066 3.94-1.5218 5.9929-3.0294a.0824.0824 0 00.0312-.0561c.491-5.1361-.4865-9.6764-3.769-13.6603a.0699.0699 0 00-.0321-.0277zM8.02 15.3312c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9555-2.4189 2.157-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.946 2.419-2.1568 2.419zm7.9748 0c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9554-2.4189 2.1569-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.946 2.419-2.1568 2.419z"/></svg>
-                Discord
-            </a>
+            <div style="margin-top: 30px; border-top: 1px solid var(--glass-border); padding-top: 20px;">
+                <p style="font-size: 0.8rem; color: #666; margin-bottom: 10px;">SYSTEM CONTROLS</p>
+                <a href="#" class="social-link" style="justify-content: center; background: rgba(255, 50, 50, 0.1); color: #ff5555;">
+                    <i class="fa-solid fa-power-off"></i> Reset Data
+                </a>
+            </div>
         </div>
+    </aside>
 
-    </nav>
+    <main>
+        <h1>14:32</h1>
+        <p class="subtitle">Time to focus.</p>
+    </main>
 
+    <footer class="app-footer">
+        <div class="footer-item active">
+            <i class="fa-solid fa-clock"></i>
+            <span>Clock</span>
+        </div>
+        
+        <div class="footer-divider"></div>
+        
+        <div class="footer-item">
+            <i class="fa-solid fa-hourglass-half"></i>
+            <span>Timer</span>
+        </div>
+        
+        <div class="footer-divider"></div>
+        
+        <div class="footer-item">
+            <i class="fa-solid fa-stopwatch"></i>
+            <span>Stopwatch</span>
+        </div>
+        
+        <div class="footer-divider"></div>
+        
+        <div class="footer-item">
+            <i class="fa-solid fa-music"></i>
+            <span>Lo-Fi</span>
+        </div>
+    </footer>
+
+    <script>
+        const sidebar = document.getElementById('sidebar');
+        const overlay = document.getElementById('overlay');
+        const sidebarTitle = document.getElementById('sidebar-title');
+        
+        // Function to Open Sidebar with specific content
+        function openSidebar(type, btnElement) {
+            // 1. Reset all buttons
+            document.querySelectorAll('.trigger-btn').forEach(b => b.classList.remove('active'));
+            
+            // 2. Highlight clicked button (optional)
+            if(btnElement) btnElement.classList.add('active');
+
+            // 3. Hide all content divs
+            document.querySelectorAll('.sidebar-content').forEach(el => el.classList.remove('active'));
+
+            // 4. Show the requested content
+            const content = document.getElementById(`content-${type}`);
+            if (content) {
+                content.classList.add('active');
+                sidebarTitle.innerText = type === 'socials' ? 'Socials' : 'System Status';
+            }
+
+            // 5. Open the drawer
+            sidebar.classList.add('open');
+            overlay.classList.add('active');
+        }
+
+        // Function to Close Sidebar
+        function closeSidebar() {
+            sidebar.classList.remove('open');
+            overlay.classList.remove('active');
+            
+            // Reset buttons visual state
+            document.querySelectorAll('.trigger-btn').forEach(b => b.classList.remove('active'));
+        }
+    </script>
 </body>
 </html>
