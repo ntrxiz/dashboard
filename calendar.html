@@ -53,17 +53,26 @@
         h1 {
             font-size: 11rem; font-weight: 800; letter-spacing: -0.6rem;
             margin: 0; text-align: center; text-transform: uppercase;
+            line-height: 1;
         }
 
         .calendar-container {
-            width: 100%; max-width: 900px; margin-top: 1rem;
+            width: 100%; max-width: 900px; margin-top: 2rem;
         }
 
+        /* Navigation Header */
         .calendar-header {
             display: flex; justify-content: space-between; align-items: center;
             padding: 1rem; border: 1px solid var(--border);
             text-transform: uppercase; letter-spacing: 0.3rem; font-size: 0.8rem;
         }
+
+        .nav-btn {
+            background: transparent; border: none; color: var(--text);
+            cursor: pointer; font-weight: 800; font-family: 'Inter', sans-serif;
+            font-size: 1rem; padding: 0 1rem; transition: opacity 0.3s;
+        }
+        .nav-btn:hover { opacity: 0.5; }
 
         .grid {
             display: grid; grid-template-columns: repeat(7, 1fr);
@@ -81,6 +90,8 @@
         }
 
         .cell:hover { background: #0f0f0f; }
+        
+        /* Highlight Today */
         .cell.today { background: #111; }
         .cell.today::after {
             content: ''; position: absolute; top: 5px; right: 5px; width: 4px; height: 4px; background: white; border-radius: 50%;
@@ -95,7 +106,6 @@
             transition: all 0.2s ease;
         }
 
-        /* Hover effect to signal deletion */
         .event-item:hover {
             background: var(--danger);
             color: white;
@@ -128,38 +138,45 @@
         
         <div class="calendar-container">
             <div class="calendar-header">
+                <button class="nav-btn" onclick="changeMonth(-1)">[ &lt; ]</button>
                 <span id="year-label">2026</span>
+                <button class="nav-btn" onclick="changeMonth(1)">[ &gt; ]</button>
             </div>
             <div class="grid" id="calendar-grid">
                 </div>
         </div>
     </main>
 
-    <footer>NTRXI CHRONOS • SYSTEM v1.2</footer>
+    <footer>NTRXI CHRONOS • SYSTEM v1.3</footer>
 
     <script>
         const modal = document.getElementById('warning-modal');
         const grid = document.getElementById('calendar-grid');
         const monthLabel = document.getElementById('month-name');
+        const yearLabel = document.getElementById('year-label');
         
         // Modal Logic
         window.addEventListener('keydown', (e) => {
             if (e.key.toLowerCase() === 'x') modal.style.display = 'none';
         });
 
-        // Data Storage
+        // State Management
         let events = JSON.parse(localStorage.getItem('ntrxi_events')) || {};
+        let currentDate = new Date();
+        let currentMonth = currentDate.getMonth();
+        let currentYear = currentDate.getFullYear();
+        let today = new Date(); // To track "today" regardless of navigation
 
         function initCalendar() {
-            const now = new Date();
-            const month = now.getMonth();
-            const year = now.getFullYear();
-            
             const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
-            monthLabel.textContent = monthNames[month];
             
-            const firstDay = new Date(year, month, 1).getDay();
-            const daysInMonth = new Date(year, month + 1, 0).getDate();
+            // Update Headers
+            monthLabel.textContent = monthNames[currentMonth];
+            yearLabel.textContent = currentYear;
+            
+            // Calculations
+            const firstDay = new Date(currentYear, currentMonth, 1).getDay();
+            const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
 
             // Clear grid
             grid.innerHTML = '';
@@ -173,45 +190,58 @@
                 grid.appendChild(label);
             });
 
-            // Empty cells for padding
+            // Empty cells padding
             for (let i = 0; i < firstDay; i++) {
                 const empty = document.createElement('div');
                 empty.className = 'cell';
                 grid.appendChild(empty);
             }
 
-            // Actual days
+            // Days
             for (let d = 1; d <= daysInMonth; d++) {
                 const cell = document.createElement('div');
                 cell.className = 'cell';
-                if (d === now.getDate()) cell.classList.add('today');
                 
-                const dateId = `${year}-${month}-${d}`;
+                // Check if this specific cell is "Today"
+                if (d === today.getDate() && currentMonth === today.getMonth() && currentYear === today.getFullYear()) {
+                    cell.classList.add('today');
+                }
+                
+                const dateId = `${currentYear}-${currentMonth}-${d}`;
                 cell.innerHTML = `<div class="date-num">${d}</div>`;
                 
-                // Render existing events
+                // Render Events
                 if (events[dateId]) {
                     events[dateId].forEach((evText, index) => {
                         const eventDiv = document.createElement('div');
                         eventDiv.className = 'event-item';
                         eventDiv.textContent = evText;
-                        
-                        // DELETION LOGIC
                         eventDiv.onclick = (e) => {
-                            e.stopPropagation(); // Prevent opening the "Add Event" prompt
+                            e.stopPropagation();
                             if(confirm(`Delete "${evText}"?`)) {
                                 deleteEvent(dateId, index);
                             }
                         };
-                        
                         cell.appendChild(eventDiv);
                     });
                 }
 
-                // ADD LOGIC
+                // Add Event Logic
                 cell.onclick = () => addEvent(dateId);
                 grid.appendChild(cell);
             }
+        }
+
+        function changeMonth(delta) {
+            currentMonth += delta;
+            if (currentMonth > 11) {
+                currentMonth = 0;
+                currentYear++;
+            } else if (currentMonth < 0) {
+                currentMonth = 11;
+                currentYear--;
+            }
+            initCalendar();
         }
 
         function addEvent(dateId) {
@@ -225,7 +255,6 @@
 
         function deleteEvent(dateId, index) {
             events[dateId].splice(index, 1);
-            // Cleanup empty arrays to save space
             if(events[dateId].length === 0) delete events[dateId];
             saveAndRender();
         }
@@ -235,6 +264,7 @@
             initCalendar();
         }
 
+        // Initialize on Load
         initCalendar();
     </script>
 </body>
