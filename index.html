@@ -142,43 +142,33 @@
         }
 
         /* Hover Effects */
-        .project-item:hover .project-link {
-            padding-left: 3rem;
-        }
-        .project-item:hover .project-name {
-            text-shadow: 0 0 20px rgba(255,255,255,0.4);
-        }
-        .project-item:hover .project-cat {
-            color: #fff;
-        }
+        .project-item:hover .project-link { padding-left: 3rem; }
+        .project-item:hover .project-name { text-shadow: 0 0 20px rgba(255,255,255,0.4); }
+        .project-item:hover .project-cat { color: #fff; }
         .project-item::before {
             content: '';
             position: absolute;
-            top: 0;
-            left: 0;
-            width: 0%;
-            height: 100%;
-            background: #111;
-            z-index: 0;
-            transition: width 0.4s ease;
+            top: 0; left: 0; width: 0%; height: 100%;
+            background: #111; z-index: 0; transition: width 0.4s ease;
         }
-        .project-item:hover::before {
-            width: 100%;
-        }
+        .project-item:hover::before { width: 100%; }
 
-        /* --- System / Apps Links (The requested addition) --- */
-        .system-nav {
+        /* --- System Modules & Social Grids --- */
+        .bottom-nav {
             padding: 4rem 2rem;
             border-top: 1px solid var(--border);
         }
 
-        .system-grid {
+        .grid-container {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
             gap: 1rem;
             margin-top: 1rem;
+            margin-bottom: 3rem;
+            max-width: 800px;
         }
 
+        /* System Link Style */
         .sys-link {
             display: block;
             border: 1px solid var(--border);
@@ -186,7 +176,7 @@
             text-align: center;
             text-decoration: none;
             color: var(--secondary);
-            font-size: 0.75rem;
+            font-size: 0.7rem;
             font-weight: 800;
             text-transform: uppercase;
             letter-spacing: 0.2rem;
@@ -200,33 +190,47 @@
             box-shadow: 0 0 15px rgba(255,255,255,0.2);
         }
 
-        /* --- Footer --- */
-        .contact {
-            padding: 2rem 2rem 4rem 2rem;
+        /* Social Button Style */
+        .social-btn {
             display: flex;
-            gap: 2rem;
-        }
-
-        .contact a {
-            color: var(--text);
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            border: 1px solid var(--border);
+            padding: 1rem 1.5rem;
             text-decoration: none;
-            font-size: 0.8rem;
+            color: var(--text);
+            font-size: 0.7rem;
             font-weight: 800;
             text-transform: uppercase;
-            letter-spacing: 0.2rem;
-            opacity: 0.5;
-            transition: opacity 0.3s;
+            letter-spacing: 0.1rem;
+            transition: all 0.3s ease;
         }
 
-        .contact a:hover {
-            opacity: 1;
+        .social-btn svg {
+            width: 18px;
+            height: 18px;
+            fill: currentColor; /* Makes icon follow text color */
+            transition: all 0.3s ease;
         }
+
+        .social-btn:hover {
+            background: var(--text);
+            color: var(--bg);
+            border-color: var(--text);
+            box-shadow: 0 0 20px rgba(255,255,255,0.3);
+        }
+        
+        .social-btn:hover svg {
+             filter: drop-shadow(0 0 5px rgba(0,0,0,0.5));
+        }
+
 
         /* Mobile */
         @media (max-width: 600px) {
             h1 { font-size: 2.5rem; }
             .project-name { font-size: 1.2rem; }
-            .system-grid { grid-template-columns: 1fr 1fr; }
+            .grid-container { grid-template-columns: 1fr 1fr; }
         }
     </style>
 </head>
@@ -250,40 +254,55 @@
         <ul class="project-list">
             <li class="project-item">
                 <a href="#" class="project-link">
-                    <span class="project-name">Liturgy API</span>
-                    <span class="project-cat">Backend</span>
+                    <span class="project-name">Project One</span>
+                    <span class="project-cat">Category // 202X</span>
                 </a>
             </li>
             <li class="project-item">
                 <a href="#" class="project-link">
-                    <span class="project-name">Neural Net</span>
-                    <span class="project-cat">Python / AI</span>
+                    <span class="project-name">Project Two</span>
+                    <span class="project-cat">Category // 202X</span>
                 </a>
             </li>
             <li class="project-item">
                 <a href="#" class="project-link">
-                    <span class="project-name">Brutalist UI</span>
-                    <span class="project-cat">Design System</span>
+                    <span class="project-name">Project Three</span>
+                    <span class="project-cat">Category // 202X</span>
                 </a>
             </li>
         </ul>
     </section>
 
-    <nav class="system-nav">
+    <nav class="bottom-nav">
+        
         <div class="section-label">System Modules</div>
-        <div class="system-grid">
+        <div class="grid-container">
             <a href="calendar.html" class="sys-link">Calendar</a>
             <a href="clock.html" class="sys-link">Clock</a>
             <a href="pomodoro.html" class="sys-link">Pomodoro</a>
             <a href="todo.html" class="sys-link">Todo</a>
         </div>
-    </nav>
 
-    <div class="contact">
-        <a href="mailto:hello@ntrxi.com">Email</a>
-        <a href="#">Github</a>
-        <a href="#">Twitter</a>
-    </div>
+        <div class="section-label">Connect</div>
+        <div class="grid-container">
+            
+            <a href="https://www.youtube.com/@ntrxi/" target="_blank" class="social-btn">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+                YouTube
+            </a>
+
+            <a href="https://www.twitch.tv/ntrxi/" target="_blank" class="social-btn">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M11.571 4.714h1.715v5.143H11.57zm4.715 0H18v5.143h-1.714zM6 0L1.714 4.286v15.428h5.143V24l4.286-4.286h3.428L22.286 12V0zm14.571 11.143l-3.428 3.428h-3.429l-3 3v-3H6.857V1.714h13.714Z"/></svg>
+                Twitch
+            </a>
+
+            <a href="http://discord.gg/b67X2Gdkw7/" target="_blank" class="social-btn">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.317 4.3698a19.7913 19.7913 0 00-4.8851-1.5152.0741.0741 0 00-.0785.0371c-.211.3753-.4447.8648-.6083 1.2495-1.8447-.2762-3.6853-.2762-5.4868 0-.1636-.3933-.4058-.8742-.6177-1.2495a.077.077 0 00-.0785-.037 19.7363 19.7363 0 00-4.8852 1.515.0699.0699 0 00-.0321.0277C.5334 9.0458-.319 13.5799.0992 18.0578a.0824.0824 0 00.0312.0561c2.053 1.5076 4.0413 2.4228 5.9929 3.0294a.0777.0777 0 00.0842-.0276c.4616-.6304.8731-1.2952 1.226-1.9942a.076.076 0 00-.0416-1.0579 13.7133 13.7133 0 01-1.9942-.9563.077.077 0 01-.0076-.1068c.1482-.1124.2966-.2333.4367-.356a.0769.0769 0 01.0775-.013c3.9288 1.7933 8.18 1.7933 12.0614 0a.077.077 0 01.0785.013c.1401.1226.2885.2435.4367.356a.077.077 0 01-.0076.1068 13.6122 13.6122 0 01-1.9942.9563.076.076 0 00-.0416 1.0579c.3529.699.7644 1.3638 1.226 1.9942a.0777.0777 0 00.0842.0276c1.9516-.6066 3.94-1.5218 5.9929-3.0294a.0824.0824 0 00.0312-.0561c.491-5.1361-.4865-9.6764-3.769-13.6603a.0699.0699 0 00-.0321-.0277zM8.02 15.3312c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9555-2.4189 2.157-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.946 2.419-2.1568 2.419zm7.9748 0c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9554-2.4189 2.1569-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.946 2.419-2.1568 2.419z"/></svg>
+                Discord
+            </a>
+        </div>
+
+    </nav>
 
 </body>
 </html>
