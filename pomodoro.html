@@ -4,12 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ntrxi | focus</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;800&family=JetBrains+Mono:wght@700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg: #0a0a0a;
+            --bg: #050505;
             --text: #ffffff;
-            --accent: #ffffff;
-            --secondary: #1a1a1a;
+            --secondary: #111111;
+            --border: #222222;
         }
 
         body {
@@ -17,104 +18,111 @@
             padding: 0;
             background-color: var(--bg);
             color: var(--text);
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            font-family: 'Inter', sans-serif;
             display: flex;
             flex-direction: column;
             min-height: 100vh;
-            transition: background 0.5s ease;
+            overflow: hidden;
         }
 
         /* --- Header / Banner --- */
         header {
-            padding: 2rem;
+            padding: 3rem 0;
             text-align: center;
         }
 
         .logo {
-            font-size: 2.5rem;
+            font-size: 1.2rem;
             font-weight: 800;
-            letter-spacing: 0.5rem;
+            letter-spacing: 0.8rem;
             text-transform: uppercase;
-            cursor: default;
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            cursor: pointer;
             display: inline-block;
+            transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+            position: relative;
         }
 
         .logo:hover {
-            transform: scale(1.1) translateY(-5px);
-            text-shadow: 0 0 20px rgba(255, 255, 255, 0.8),
-                         0 0 40px rgba(255, 255, 255, 0.4);
+            transform: scale(1.2);
+            letter-spacing: 1.2rem;
+            text-shadow: 0 0 15px rgba(255, 255, 255, 0.6),
+                         0 0 30px rgba(255, 255, 255, 0.2);
         }
 
         /* --- Main Content --- */
         main {
             flex: 1;
             display: flex;
-            flex-direction: column;
             align-items: center;
             justify-content: center;
         }
 
         .timer-container {
             text-align: center;
-            background: var(--secondary);
-            padding: 3rem 5rem;
-            border-radius: 2rem;
-            border: 1px solid #333;
+            width: 100%;
+            max-width: 500px;
         }
 
+        /* The Aesthetic Bold Countdown */
         #timer-display {
-            font-size: 8rem;
-            font-weight: 200;
-            margin: 1rem 0;
-            font-variant-numeric: tabular-nums;
+            font-family: 'Inter', sans-serif;
+            font-size: 11rem; /* Large and impactful */
+            font-weight: 800;
+            line-height: 1;
+            margin: 0.5rem 0;
+            letter-spacing: -0.4rem; /* Tight kerning for high-end look */
+            font-variant-numeric: tabular-nums; /* Prevents numbers from jumping */
+        }
+
+        .status-label {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5rem;
+            opacity: 0.4;
+            margin-bottom: 1rem;
         }
 
         .controls {
             display: flex;
-            gap: 1.5rem;
+            gap: 1rem;
             justify-content: center;
             margin-top: 2rem;
         }
 
         button {
             background: transparent;
-            border: 1px solid var(--text);
+            border: 1px solid var(--border);
             color: var(--text);
-            padding: 0.8rem 2rem;
-            font-size: 1rem;
+            padding: 0.7rem 2.2rem;
+            font-size: 0.7rem;
+            font-weight: 800;
             text-transform: uppercase;
-            letter-spacing: 0.1rem;
+            letter-spacing: 0.2rem;
             cursor: pointer;
             transition: all 0.3s ease;
-            border-radius: 0.5rem;
+            border-radius: 3px;
         }
 
         button:hover {
             background: var(--text);
             color: var(--bg);
-        }
-
-        .status-label {
-            font-size: 0.9rem;
-            text-transform: uppercase;
-            letter-spacing: 0.3rem;
-            opacity: 0.6;
+            border-color: var(--text);
+            box-shadow: 0 0 20px rgba(255,255,255,0.1);
         }
 
         /* --- Footer --- */
         footer {
-            padding: 2rem;
+            padding: 3rem;
             text-align: center;
-            font-size: 0.8rem;
-            opacity: 0.4;
-            letter-spacing: 0.1rem;
+            font-size: 0.65rem;
+            opacity: 0.3;
+            letter-spacing: 0.3rem;
+            text-transform: uppercase;
         }
 
-        /* Responsive */
+        /* Mobile Adjustments */
         @media (max-width: 600px) {
-            #timer-display { font-size: 5rem; }
-            .timer-container { padding: 2rem; }
+            #timer-display { font-size: 6rem; letter-spacing: -0.2rem; }
         }
     </style>
 </head>
@@ -126,7 +134,7 @@
 
     <main>
         <div class="timer-container">
-            <div id="status" class="status-label">Focus Session</div>
+            <div id="status" class="status-label">Deep Work</div>
             <div id="timer-display">50:00</div>
             
             <div class="controls">
@@ -137,7 +145,7 @@
     </main>
 
     <footer>
-        &copy; 2026 NTRXI DESIGN • SIMPLE • ELEGANT
+        System v1.0 • Built for focus
     </footer>
 
     <script>
@@ -154,7 +162,7 @@
             const minutes = Math.floor(timeLeft / 60);
             const seconds = timeLeft % 60;
             display.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
-            document.title = `${display.textContent} - ntrxi`;
+            document.title = `${display.textContent} | ntrxi`;
         }
 
         function toggleTimer() {
@@ -179,9 +187,13 @@
         function switchMode() {
             isFocusMode = !isFocusMode;
             timeLeft = isFocusMode ? 50 * 60 : 10 * 60;
-            statusLabel.textContent = isFocusMode ? "Focus Session" : "Short Break";
+            statusLabel.textContent = isFocusMode ? "Deep Work" : "Short Break";
             updateDisplay();
-            alert(isFocusMode ? "Time to focus!" : "Take a break.");
+            
+            // Subtle browser notification
+            if (Notification.permission === "granted") {
+                new Notification(isFocusMode ? "Back to work" : "Break time");
+            }
         }
 
         function resetTimer() {
@@ -189,7 +201,7 @@
             timerId = null;
             isFocusMode = true;
             timeLeft = 50 * 60;
-            statusLabel.textContent = "Focus Session";
+            statusLabel.textContent = "Deep Work";
             startBtn.textContent = 'Start';
             updateDisplay();
         }
@@ -197,7 +209,11 @@
         startBtn.addEventListener('click', toggleTimer);
         resetBtn.addEventListener('click', resetTimer);
 
-        // Initialize
+        // Ask for notification permission
+        if (Notification.permission !== "denied") {
+            Notification.requestPermission();
+        }
+
         updateDisplay();
     </script>
 </body>
