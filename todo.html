@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ntrxi | tasks</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #050505;
+            --text: #ffffff;
+            --accent: #ffffff;
+            --secondary: #111111;
+            --border: #222222;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: var(--bg);
+            color: var(--text);
+            font-family: 'Inter', sans-serif;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* --- Header --- */
+        header {
+            padding: 3rem 0;
+            text-align: center;
+        }
+
+        .logo {
+            font-size: 1.2rem;
+            font-weight: 800;
+            letter-spacing: 0.8rem;
+            text-transform: uppercase;
+            cursor: pointer;
+            display: inline-block;
+            transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+        }
+
+        .logo:hover {
+            transform: scale(1.2);
+            letter-spacing: 1.2rem;
+            text-shadow: 0 0 15px rgba(255, 255, 255, 0.6);
+        }
+
+        /* --- Warning Banner --- */
+        .cache-warning {
+            background: #111;
+            color: #666;
+            font-size: 0.6rem;
+            text-transform: uppercase;
+            letter-spacing: 0.2rem;
+            padding: 10px;
+            text-align: center;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .cache-warning span {
+            color: #999;
+            font-weight: 800;
+        }
+
+        /* --- Main Content --- */
+        main {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 2rem;
+        }
+
+        .todo-container {
+            width: 100%;
+            max-width: 600px;
+        }
+
+        h1 {
+            font-size: 4rem;
+            font-weight: 800;
+            letter-spacing: -0.2rem;
+            margin-bottom: 2rem;
+            text-align: left;
+        }
+
+        .input-group {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 3rem;
+        }
+
+        input {
+            flex: 1;
+            background: transparent;
+            border: none;
+            border-bottom: 2px solid var(--border);
+            color: white;
+            font-size: 1.2rem;
+            padding: 10px 0;
+            outline: none;
+            transition: border-color 0.3s ease;
+        }
+
+        input:focus {
+            border-color: var(--text);
+        }
+
+        button#add-btn {
+            background: white;
+            border: none;
+            color: black;
+            font-weight: 800;
+            text-transform: uppercase;
+            padding: 0 1.5rem;
+            cursor: pointer;
+            transition: opacity 0.3s;
+        }
+
+        button#add-btn:hover {
+            opacity: 0.8;
+        }
+
+        /* --- List Styles --- */
+        ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        li {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.5rem 0;
+            border-bottom: 1px solid var(--border);
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+        }
+
+        li.completed span {
+            text-decoration: line-through;
+            opacity: 0.3;
+        }
+
+        .task-text {
+            cursor: pointer;
+            flex: 1;
+        }
+
+        .delete-btn {
+            background: transparent;
+            border: none;
+            color: #444;
+            cursor: pointer;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1rem;
+            transition: color 0.3s;
+        }
+
+        .delete-btn:hover {
+            color: #ff4444;
+        }
+
+        /* --- Footer --- */
+        footer {
+            padding: 3rem;
+            text-align: center;
+            font-size: 0.65rem;
+            opacity: 0.3;
+            letter-spacing: 0.3rem;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="cache-warning">
+        <span>Warning:</span> Data is stored locally. Clearing browser cache will delete your tasks.
+    </div>
+
+    <header>
+        <div class="logo">ntrxi</div>
+    </header>
+
+    <main>
+        <div class="todo-container">
+            <h1>TASKS</h1>
+            
+            <div class="input-group">
+                <input type="text" id="todo-input" placeholder="What needs to be done?" autocomplete="off">
+                <button id="add-btn">Add</button>
+            </div>
+
+            <ul id="todo-list">
+                </ul>
+        </div>
+    </main>
+
+    <footer>
+        Minimalist Task Engine • v1.0
+    </footer>
+
+    <script>
+        const input = document.getElementById('todo-input');
+        const addBtn = document.getElementById('add-btn');
+        const todoList = document.getElementById('todo-list');
+
+        // Load from LocalStorage
+        let tasks = JSON.parse(localStorage.getItem('ntrxi_tasks')) || [];
+
+        function saveAndRender() {
+            localStorage.setItem('ntrxi_tasks', JSON.stringify(tasks));
+            render();
+        }
+
+        function render() {
+            todoList.innerHTML = '';
+            tasks.forEach((task, index) => {
+                const li = document.createElement('li');
+                if (task.completed) li.classList.add('completed');
+                
+                li.innerHTML = `
+                    <span class="task-text" onclick="toggleTask(${index})">${task.text}</span>
+                    <button class="delete-btn" onclick="deleteTask(${index})">Remove</button>
+                `;
+                todoList.appendChild(li);
+            });
+        }
+
+        function addTask() {
+            const text = input.value.trim();
+            if (text) {
+                tasks.push({ text, completed: false });
+                input.value = '';
+                saveAndRender();
+            }
+        }
+
+        window.toggleTask = (index) => {
+            tasks[index].completed = !tasks[index].completed;
+            saveAndRender();
+        };
+
+        window.deleteTask = (index) => {
+            tasks.splice(index, 1);
+            saveAndRender();
+        };
+
+        addBtn.addEventListener('click', addTask);
+        input.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') addTask();
+        });
+
+        render();
+    </script>
+</body>
+</html>
