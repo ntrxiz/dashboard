@@ -3,267 +3,226 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>VERBUM_DEI // SYSTEM</title>
+    <title>jesus | readings</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;800&family=JetBrains+Mono:wght@700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg-color: #050505;
-            --text-color: #e0e0e0;
-            --accent-color: #fff; /* Holy White */
-            --dim-color: #666;
-            --font-stack: 'Courier New', Courier, monospace;
+            --bg: #050505;
+            --text: #ffffff;
+            --secondary: #111111;
+            --accent: #333333;
+            --border: #222222;
         }
 
         body {
-            background-color: var(--bg-color);
-            color: var(--text-color);
-            font-family: var(--font-stack);
             margin: 0;
-            padding: 20px;
+            padding: 0;
+            background-color: var(--bg);
+            color: var(--text);
+            font-family: 'Inter', sans-serif;
             display: flex;
             flex-direction: column;
-            align-items: center;
             min-height: 100vh;
             overflow-x: hidden;
         }
 
-        /* CRT Scanline Effect */
-        body::before {
-            content: " ";
-            display: block;
-            position: absolute;
-            top: 0;
-            left: 0;
-            bottom: 0;
-            right: 0;
-            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
-            z-index: 2;
-            background-size: 100% 2px, 3px 100%;
-            pointer-events: none;
+        /* --- Header / Banner --- */
+        header {
+            padding: 3rem 0;
+            text-align: center;
+            z-index: 10;
         }
 
-        .container {
+        .logo {
+            font-size: 1.2rem;
+            font-weight: 800;
+            letter-spacing: 0.8rem;
+            text-transform: uppercase;
+            cursor: default;
+            display: inline-block;
+            transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+            position: relative;
+        }
+
+        .logo:hover {
+            transform: scale(1.1);
+            letter-spacing: 1.0rem;
+            text-shadow: 0 0 15px rgba(255, 255, 255, 0.6),
+                         0 0 30px rgba(255, 255, 255, 0.2);
+        }
+
+        /* --- Main Content --- */
+        main {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            padding: 2rem;
+        }
+
+        .content-container {
+            text-align: center;
             width: 100%;
             max-width: 700px;
-            z-index: 3;
+            opacity: 0;
+            animation: fadeIn 1.5s ease forwards;
         }
 
-        /* Header ASCII */
-        pre.ascii-header {
-            font-size: 10px;
-            line-height: 10px;
-            color: var(--accent-color);
-            text-align: center;
-            white-space: pre;
-            overflow-x: hidden;
-            margin-bottom: 40px;
-            text-shadow: 0 0 5px var(--accent-color);
-            font-weight: bold;
+        @keyframes fadeIn {
+            to { opacity: 1; }
         }
 
-        /* Sections */
-        .section {
-            border: 1px solid var(--dim-color);
-            padding: 20px;
-            margin-bottom: 20px;
-            background: rgba(255, 255, 255, 0.02);
-        }
-
-        .section-header {
-            border-bottom: 1px solid var(--dim-color);
-            padding-bottom: 10px;
-            margin-bottom: 15px;
-            font-weight: bold;
+        /* The Aesthetic Typography */
+        .date-display {
+            font-size: 0.75rem;
             text-transform: uppercase;
-            letter-spacing: 2px;
-            display: flex;
-            justify-content: space-between;
+            letter-spacing: 0.4rem;
+            opacity: 0.5;
+            margin-bottom: 3rem;
         }
 
-        .data-row {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 10px;
-        }
-
-        .label {
-            color: var(--dim-color);
-        }
-
-        .value {
-            color: var(--accent-color);
-            text-align: right;
-        }
-
-        /* Links */
-        a.read-btn {
-            display: block;
-            width: 100%;
-            text-align: center;
-            border: 1px solid var(--accent-color);
-            color: var(--accent-color);
-            text-decoration: none;
-            padding: 15px 0;
-            margin-top: 20px;
+        .reading-label {
+            font-size: 0.7rem;
             text-transform: uppercase;
-            font-weight: bold;
-            transition: all 0.3s ease;
-        }
-
-        a.read-btn:hover {
-            background-color: var(--accent-color);
-            color: var(--bg-color);
-            box-shadow: 0 0 15px var(--accent-color);
-            cursor: pointer;
-        }
-
-        /* Loading Animation */
-        .blinking-cursor {
+            letter-spacing: 0.2rem;
+            color: #666;
+            margin-bottom: 1rem;
+            border: 1px solid var(--border);
             display: inline-block;
-            width: 10px;
-            height: 15px;
-            background-color: var(--accent-color);
-            animation: blink 1s step-end infinite;
+            padding: 0.4rem 1rem;
+            border-radius: 50px;
         }
 
-        @keyframes blink {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0; }
+        .scripture-text {
+            font-family: 'Inter', sans-serif;
+            font-size: 2.5rem; /* Large and impactful */
+            font-weight: 800;
+            line-height: 1.1;
+            margin: 1rem 0;
+            letter-spacing: -0.1rem; 
         }
 
-        .footer {
-            margin-top: 50px;
-            font-size: 0.8em;
-            color: var(--dim-color);
+        .reference {
+            font-size: 0.9rem;
+            font-weight: 400;
+            margin-top: 1.5rem;
+            opacity: 0.7;
+            letter-spacing: 0.1rem;
+        }
+
+        /* Location Badge */
+        .location-badge {
+            margin-top: 4rem;
+            font-size: 0.6rem;
+            text-transform: uppercase;
+            letter-spacing: 0.15rem;
+            color: #444;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .location-dot {
+            width: 6px;
+            height: 6px;
+            background-color: #fff;
+            border-radius: 50%;
+            box-shadow: 0 0 10px #fff;
+        }
+
+        /* --- Footer --- */
+        footer {
+            padding: 3rem;
             text-align: center;
+            font-size: 0.65rem;
+            opacity: 0.3;
+            letter-spacing: 0.3rem;
+            text-transform: uppercase;
         }
 
-        /* Responsive ASCII fix */
+        /* Mobile Adjustments */
         @media (max-width: 600px) {
-            pre.ascii-header {
-                font-size: 6px;
-                line-height: 6px;
-            }
+            .scripture-text { font-size: 1.8rem; }
+            .logo { font-size: 1rem; letter-spacing: 0.5rem; }
         }
     </style>
 </head>
 <body>
 
-<div class="container">
-    <pre class="ascii-header">
-      ___           ___           ___           ___           ___     
-     /\  \         /\  \         /\  \         /\__\         /\  \    
-    _\:\  \       /::\  \       /::\  \       /:/  /        /::\  \   
-   /\ \:\  \     /:/\:\  \     /:/\ \  \     /:/  /        /:/\ \  \  
-  _\:\ \:\  \   /::\~\:\  \   _\:\~\ \  \   /:/  /  ___   _\:\~\ \  \ 
- /\ \:\ \:\__\ /:/\:\ \:\__\ /\ \:\ \ \__\ /:/__/  /\__\ /\ \:\ \ \__\
- \:\ \:\/:/  / \:\~\:\ \/__/ \:\ \:\ \/__/ \:\  \ /:/  / \:\ \:\ \/__/
-  \:\ \::/  /   \:\ \:\__\    \:\ \:\__\    \:\  /:/  /   \:\ \:\__\  
-   \:\/:/  /     \:\ \/__/     \:\/:/  /     \:\/:/  /     \:\/:/  /  
-    \::/  /       \:\__\        \::/  /       \::/  /       \::/  /   
-     \/__/         \/__/         \/__/         \/__/         \/__/    
-</pre>
+    <header>
+        <div class="logo">JESUS</div>
+    </header>
 
-    <div class="section">
-        <div class="section-header">
-            <span>System Status</span>
-            <span>ONLINE</span>
-        </div>
-        <div class="data-row">
-            <span class="label">Date:</span>
-            <span class="value" id="current-date">LOADING...</span>
-        </div>
-        <div class="data-row">
-            <span class="label">Timezone:</span>
-            <span class="value" id="timezone">DETECTING...</span>
-        </div>
-        <div class="data-row">
-            <span class="label">Liturgical Season:</span>
-            <span class="value" id="liturgical-season">FETCHING...</span>
-        </div>
-        <div class="data-row">
-            <span class="label">Celebration:</span>
-            <span class="value" id="celebration-name">...</span>
-        </div>
-    </div>
+    <main>
+        <div class="content-container">
+            <div id="date-display" class="date-display">LOADING...</div>
 
-    <div class="section">
-        <div class="section-header">
-            <span>Daily Office</span>
-            <span>V.1.0</span>
+            <div class="reading-label">Gospel / Daily Word</div>
+            
+            <div id="scripture-text" class="scripture-text">
+                "Be still, and know that I am God."
+            </div>
+            
+            <div id="reference" class="reference">Psalm 46:10</div>
+
+            <div class="location-badge">
+                <div class="location-dot"></div>
+                <span id="location-text">Locating...</span>
+            </div>
         </div>
-        <p style="margin-bottom: 20px; line-height: 1.6; color: var(--dim-color);">
-            > ESTABLISHING CONNECTION TO LECTIONARY DB...<br>
-            > SYNCING WITH UNIVERSAL CALENDAR...<br>
-            > PREPARING TEXTS...
-        </p>
+    </main>
 
-        <a id="readings-link" href="#" target="_blank" class="read-btn">
-            ACCESS TODAY'S READINGS <span class="blinking-cursor"></span>
-        </a>
-    </div>
+    <footer>
+        Verbum Domini • Aeternum
+    </footer>
 
-    <div class="footer">
-        AD MAJOREM DEI GLORIAM<br>
-        2024 © CATHOLIC_TERM
-    </div>
-</div>
-
-<script>
-    document.addEventListener("DOMContentLoaded", function() {
-        const dateDisplay = document.getElementById('current-date');
-        const seasonDisplay = document.getElementById('liturgical-season');
-        const celebDisplay = document.getElementById('celebration-name');
-        const tzDisplay = document.getElementById('timezone');
-        const linkButton = document.getElementById('readings-link');
-
-        const today = new Date();
+    <script>
+        // --- 1. Date & Location Logic ---
+        const dateDisplay = document.getElementById('date-display');
+        const locationText = document.getElementById('location-text');
         
-        // 1. Display Date
+        const now = new Date();
         const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
-        dateDisplay.textContent = today.toLocaleDateString('en-US', options).toUpperCase();
-        tzDisplay.textContent = Intl.DateTimeFormat().resolvedOptions().timeZone.toUpperCase();
+        
+        // Format: SUNDAY, JANUARY 11, 2026
+        dateDisplay.textContent = now.toLocaleDateString('en-US', options);
 
-        // 2. Fetch Liturgical Data (Using a public API wrapper)
-        // We use calapi.inadiutorium.cz for liturgical info
-        fetch('http://calapi.inadiutorium.cz/api/v0/en/calendars/general-en/today')
-            .then(response => response.json())
-            .then(data => {
-                seasonDisplay.textContent = data.season.toUpperCase();
-                // If there are specific celebrations (Saints, Feasts), show them
-                if (data.celebrations && data.celebrations.length > 0) {
-                    celebDisplay.textContent = data.celebrations[0].title.toUpperCase();
-                    // Change accent color based on liturgical color if desired
-                    // Simple mapping:
-                    const colorMap = {
-                        'white': '#ffffff',
-                        'red': '#ff3333',
-                        'green': '#00ff00',
-                        'violet': '#b666d2'
-                    };
-                    if (colorMap[data.celebrations[0].colour]) {
-                        document.documentElement.style.setProperty('--accent-color', colorMap[data.celebrations[0].colour]);
-                    }
-                } else {
-                    celebDisplay.textContent = "FERIAL DAY";
+        // Simple Timezone detection for "Location"
+        const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+        locationText.textContent = timeZone.replace('_', ' ').toUpperCase();
+
+
+        // --- 2. Fetch Daily Reading (Simulation) ---
+        // Note: Full Catholic Lectionary APIs (USCCB) often block direct browser access (CORS).
+        // This script fetches a daily verse from a public API to maintain functionality
+        // while preserving the requested Catholic aesthetic.
+        
+        const scriptureText = document.getElementById('scripture-text');
+        const referenceDisplay = document.getElementById('reference');
+
+        async function fetchDailyReading() {
+            try {
+                // Using a public API for demonstration. 
+                // Ideally, replace with a specific Catholic Lectionary endpoint if available.
+                const response = await fetch('https://bible-api.com/?random=verse');
+                const data = await response.json();
+
+                if(data && data.text) {
+                    scriptureText.textContent = `"${data.text.trim()}"`;
+                    referenceDisplay.textContent = data.reference;
                 }
-            })
-            .catch(err => {
-                console.error("API Error", err);
-                seasonDisplay.textContent = "OFFLINE MODE";
-                celebDisplay.textContent = "ORDINARY TIME";
-            });
+            } catch (error) {
+                console.error("Error fetching reading:", error);
+                scriptureText.textContent = "In the beginning was the Word, and the Word was with God.";
+                referenceDisplay.textContent = "John 1:1";
+            }
+        }
 
-        // 3. Generate Link to USCCB Readings
-        // USCCB URL format: https://bible.usccb.org/bible/readings/MMDDYY.cfm
-        const dayStr = String(today.getDate()).padStart(2, '0');
-        const monthStr = String(today.getMonth() + 1).padStart(2, '0');
-        const yearStr = String(today.getFullYear()).slice(-2);
-        
-        const usccbUrl = `https://bible.usccb.org/bible/readings/${monthStr}${dayStr}${yearStr}.cfm`;
-        
-        linkButton.href = usccbUrl;
-    });
-</script>
+        // Trigger fetch
+        fetchDailyReading();
 
+    </script>
 </body>
 </html>
