@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Focus Dashboard v2.2</title>
+    <title>Focus Dashboard v2.3</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
@@ -165,9 +165,9 @@
         .clock-container span.ampm {
             font-size: 3rem;
             font-weight: 300;
-            margin-left: 10px;
+            margin-left: 0px; /* REMOVED SPACE */
             color: #666;
-            -webkit-text-fill-color: #666; /* Override gradient for AM/PM */
+            -webkit-text-fill-color: #666; 
         }
         
         .clock-container p { color: #888; margin-top: 10px; font-size: 1.2rem; text-align: center; }
@@ -363,7 +363,7 @@
 
     <main>
         <div id="section-clock" class="section active-section clock-container">
-            <h1 id="clock-time">00:00 <span class="ampm">AM</span></h1>
+            <h1 id="clock-time">00:00<span class="ampm">AM</span></h1>
             <p id="clock-date" class="subtitle">Loading Date...</p>
         </div>
 
@@ -437,7 +437,7 @@
     </footer>
 
     <script>
-        // --- 1. CLOCK LOGIC (Updated to 12-hr with AM/PM) ---
+        // --- 1. CLOCK LOGIC (Updated to 12-hr with AM/PM and NO SPACE) ---
         function updateClock() {
             const now = new Date();
             // Get Hours, Minutes and AM/PM logic manually to separate styling
@@ -451,8 +451,8 @@
             const timeString = `${hours}:${minutes}`;
             const dateString = now.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' });
             
-            // Insert HTML to style AM/PM separately (smaller font)
-            document.getElementById('clock-time').innerHTML = `${timeString} <span class="ampm">${ampm}</span>`;
+            // Insert HTML to style AM/PM separately (smaller font, NO SPACE before span)
+            document.getElementById('clock-time').innerHTML = `${timeString}<span class="ampm">${ampm}</span>`;
             document.getElementById('clock-date').textContent = dateString;
         }
         setInterval(updateClock, 1000);
