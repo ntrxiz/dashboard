@@ -9,9 +9,8 @@
         :root {
             --bg: #050505;
             --text: #ffffff;
-            --accent: #ffffff;
-            --secondary: #111111;
             --border: #222222;
+            --modal-bg: rgba(5, 5, 5, 0.95);
         }
 
         body {
@@ -23,6 +22,52 @@
             display: flex;
             flex-direction: column;
             min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* --- Cache Warning Modal --- */
+        #warning-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--modal-bg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            backdrop-filter: blur(10px);
+        }
+
+        .modal-content {
+            text-align: center;
+            padding: 2rem;
+            max-width: 500px;
+        }
+
+        .modal-content h2 {
+            font-weight: 800;
+            letter-spacing: 0.5rem;
+            text-transform: uppercase;
+            font-size: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .modal-content p {
+            font-size: 0.75rem;
+            letter-spacing: 0.2rem;
+            line-height: 1.6;
+            opacity: 0.6;
+            text-transform: uppercase;
+            margin-bottom: 2rem;
+        }
+
+        .close-hint {
+            font-size: 0.6rem;
+            letter-spacing: 0.4rem;
+            opacity: 0.3;
+            text-transform: uppercase;
         }
 
         /* --- Header --- */
@@ -47,65 +92,49 @@
             text-shadow: 0 0 15px rgba(255, 255, 255, 0.6);
         }
 
-        /* --- Warning Banner --- */
-        .cache-warning {
-            background: #111;
-            color: #666;
-            font-size: 0.6rem;
-            text-transform: uppercase;
-            letter-spacing: 0.2rem;
-            padding: 10px;
-            text-align: center;
-            border-bottom: 1px solid var(--border);
-        }
-
-        .cache-warning span {
-            color: #999;
-            font-weight: 800;
-        }
-
         /* --- Main Content --- */
         main {
             flex: 1;
             display: flex;
             flex-direction: column;
             align-items: center;
+            justify-content: center;
             padding: 2rem;
+        }
+
+        /* Header scaled to match Timer/Clock size */
+        h1 {
+            font-size: 11rem; /* Same as Timer */
+            font-weight: 800;
+            letter-spacing: -0.6rem;
+            margin: 0;
+            text-align: center;
+            text-transform: uppercase;
         }
 
         .todo-container {
             width: 100%;
             max-width: 600px;
-        }
-
-        h1 {
-            font-size: 4rem;
-            font-weight: 800;
-            letter-spacing: -0.2rem;
-            margin-bottom: 2rem;
-            text-align: left;
+            margin-top: -2rem; /* Pulling up to keep visual balance */
         }
 
         .input-group {
             display: flex;
             gap: 10px;
-            margin-bottom: 3rem;
+            margin: 2rem 0;
         }
 
         input {
             flex: 1;
             background: transparent;
             border: none;
-            border-bottom: 2px solid var(--border);
+            border-bottom: 1px solid var(--border);
             color: white;
-            font-size: 1.2rem;
+            font-size: 0.9rem;
             padding: 10px 0;
             outline: none;
-            transition: border-color 0.3s ease;
-        }
-
-        input:focus {
-            border-color: var(--text);
+            text-transform: uppercase;
+            letter-spacing: 0.1rem;
         }
 
         button#add-btn {
@@ -116,11 +145,8 @@
             text-transform: uppercase;
             padding: 0 1.5rem;
             cursor: pointer;
-            transition: opacity 0.3s;
-        }
-
-        button#add-btn:hover {
-            opacity: 0.8;
+            font-size: 0.7rem;
+            letter-spacing: 0.1rem;
         }
 
         /* --- List Styles --- */
@@ -133,15 +159,11 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 1.5rem 0;
+            padding: 1rem 0;
             border-bottom: 1px solid var(--border);
-            font-size: 1.1rem;
-            transition: all 0.3s ease;
-        }
-
-        li.completed span {
-            text-decoration: line-through;
-            opacity: 0.3;
+            font-size: 0.8rem;
+            letter-spacing: 0.1rem;
+            text-transform: uppercase;
         }
 
         .task-text {
@@ -149,20 +171,22 @@
             flex: 1;
         }
 
+        li.completed .task-text {
+            text-decoration: line-through;
+            opacity: 0.2;
+        }
+
         .delete-btn {
             background: transparent;
             border: none;
             color: #444;
             cursor: pointer;
-            font-size: 0.7rem;
+            font-size: 0.6rem;
             text-transform: uppercase;
-            letter-spacing: 0.1rem;
             transition: color 0.3s;
         }
 
-        .delete-btn:hover {
-            color: #ff4444;
-        }
+        .delete-btn:hover { color: #fff; }
 
         /* --- Footer --- */
         footer {
@@ -172,12 +196,20 @@
             opacity: 0.3;
             letter-spacing: 0.3rem;
         }
+
+        @media (max-width: 768px) {
+            h1 { font-size: 5rem; letter-spacing: -0.2rem; }
+        }
     </style>
 </head>
 <body>
 
-    <div class="cache-warning">
-        <span>Warning:</span> Data is stored locally. Clearing browser cache will delete your tasks.
+    <div id="warning-modal">
+        <div class="modal-content">
+            <h2>System Notice</h2>
+            <p>This engine uses local storage. If you clear your browser cache, all tasks will be permanently deleted.</p>
+            <div class="close-hint">Press [ X ] to acknowledge</div>
+        </div>
     </div>
 
     <header>
@@ -185,16 +217,13 @@
     </header>
 
     <main>
+        <h1>Tasks</h1>
         <div class="todo-container">
-            <h1>TASKS</h1>
-            
             <div class="input-group">
-                <input type="text" id="todo-input" placeholder="What needs to be done?" autocomplete="off">
+                <input type="text" id="todo-input" placeholder="Enter task..." autocomplete="off">
                 <button id="add-btn">Add</button>
             </div>
-
-            <ul id="todo-list">
-                </ul>
+            <ul id="todo-list"></ul>
         </div>
     </main>
 
@@ -206,8 +235,16 @@
         const input = document.getElementById('todo-input');
         const addBtn = document.getElementById('add-btn');
         const todoList = document.getElementById('todo-list');
+        const modal = document.getElementById('warning-modal');
 
-        // Load from LocalStorage
+        // Modal Logic: Press X to close
+        window.addEventListener('keydown', (e) => {
+            if (e.key.toLowerCase() === 'x') {
+                modal.style.display = 'none';
+            }
+        });
+
+        // Task Logic
         let tasks = JSON.parse(localStorage.getItem('ntrxi_tasks')) || [];
 
         function saveAndRender() {
@@ -220,10 +257,9 @@
             tasks.forEach((task, index) => {
                 const li = document.createElement('li');
                 if (task.completed) li.classList.add('completed');
-                
                 li.innerHTML = `
                     <span class="task-text" onclick="toggleTask(${index})">${task.text}</span>
-                    <button class="delete-btn" onclick="deleteTask(${index})">Remove</button>
+                    <button class="delete-btn" onclick="deleteTask(${index})">[Remove]</button>
                 `;
                 todoList.appendChild(li);
             });
@@ -249,9 +285,7 @@
         };
 
         addBtn.addEventListener('click', addTask);
-        input.addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') addTask();
-        });
+        input.addEventListener('keypress', (e) => { if (e.key === 'Enter') addTask(); });
 
         render();
     </script>
